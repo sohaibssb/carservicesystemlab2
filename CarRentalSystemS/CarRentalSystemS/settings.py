@@ -31,6 +31,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'PaymentService',
+    'RentalService',
+    'GatewayService',
+    'rest_framework',
+    'CarsService',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

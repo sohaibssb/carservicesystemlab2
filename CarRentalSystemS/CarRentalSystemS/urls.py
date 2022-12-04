@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from CarsService import views
+#from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/',include('CarsService.urls')),
+    path('api/v1/',include('RentalService.urls')),
+    path('api/v1/', include('PaymentService.urls')),
 ]
