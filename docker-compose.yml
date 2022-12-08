@@ -1,0 +1,68 @@
+version: "3"
+services:
+  postgres-dbs:
+    image: library/postgres:13
+    container_name: postgres-dbs
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./postgres/:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+  gatewayservice:
+    container_name: gatewayservice
+    image: gatewayservice
+    build:
+      context: ./Gatewayservice
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app/Gatewayservice
+    depends_on:
+      - postgres-dbs
+      - paymentservice
+      - carsservice
+      - rentalservice
+  paymentservice:
+    container_name: paymentservice
+    image: paymentservice
+    build:
+      context: ./PaymentService
+    restart: always
+    ports:
+      - "8050:8050"
+    volumes:
+      - .:/app/PaymentService
+    depends_on:
+      - postgres-dbs
+  loyaltyservice:
+    container_name: carsservice
+    image: carsservice
+    build:
+      context: ./CarsService
+    restart: always
+    ports:
+      - "8070:8070"
+    volumes:
+      - .:/app/CarsService
+    depends_on:
+      - postgres-dbs
+  reservationservice:
+    container_name: rentalservice
+    image: rentalservice
+    build:
+      context: ./RentalService
+    restart: always
+    ports:
+      - "8060:8060"
+    volumes:
+      - .:/app/RentalService
+    depends_on:
+      - postgres-dbs
+volumes:
+  db-data:
